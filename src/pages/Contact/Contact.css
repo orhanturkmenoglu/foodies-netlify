@@ -1,0 +1,45 @@
+.contact-section {
+  background-color: #f8f9fa;
+}
+
+/* Gölge ve geçiş efekti */
+.input-glow {
+  border: 1px solid #dee2e6;
+  border-radius: 50px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0 transparent;
+}
+
+.input-glow:focus {
+  border-color: #ff9800;
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
+  outline: none;
+}
+
+/* Buton stili */
+.contact-btn {
+  background: linear-gradient(90deg, #ff7b00, #ffb347);
+  color: white;
+  border-radius: 50px;
+  border: none;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3);
+}
+
+.contact-btn:hover {
+  background: linear-gradient(90deg, #ff9a00, #ffc97d);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 123, 0, 0.4);
+}
+
+/* Form konteyner */
+.contact-form {
+  background-color: #fff;
+  border-radius: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.contact-form:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
