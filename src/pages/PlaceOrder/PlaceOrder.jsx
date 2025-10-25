@@ -27,7 +27,7 @@ const CheckoutForm = ({ orderData, token, clearCart }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/orders/create",
+        "https://soothing-recreation-production.up.railway.app/api/orders/create",
         orderData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -131,7 +131,7 @@ export const PlaceOrder = () => {
 
   const clearCart = async () => {
     try {
-      await axios.delete("http://localhost:8080/api/cart", {
+      await axios.delete("https://soothing-recreation-production.up.railway.app/api/cart", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setQuantities({});

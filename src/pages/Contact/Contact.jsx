@@ -19,7 +19,7 @@ export const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/contact", data);
+      const response = await axios.post("https://soothing-recreation-production.up.railway.app/api/contact", data);
       if (response.status === 201) {
         toast.success("Message sent successfully!");
         setData({ firstName: "", lastName: "", email: "", message: "" });
