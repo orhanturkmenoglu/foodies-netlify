@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "./Contact.css";
 
+
 export const Contact = () => {
   const [data, setData] = useState({
     firstName: "",
@@ -11,6 +12,8 @@ export const Contact = () => {
     message: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
@@ -18,8 +21,12 @@ export const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      const response = await axios.post("https://soothing-recreation-production.up.railway.app/api/contact", data);
+      const response = await axios.post(
+        "https://soothing-recreation-production.up.railway.app/api/contact",
+        data
+      );
       if (response.status === 201) {
         toast.success("Message sent successfully!");
         setData({ firstName: "", lastName: "", email: "", message: "" });
@@ -29,6 +36,8 @@ export const Contact = () => {
     } catch (error) {
       toast.error("Failed to send message. Please check your connection.");
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -38,11 +47,15 @@ export const Contact = () => {
         <div className="row justify-content-center">
           <div className="col-lg-8">
             <div className="contact-form p-5 shadow-lg rounded-4 bg-white">
-              <h2 className="text-center mb-4 fw-bold" style={{ color: "#212529" }}>
+              <h2
+                className="text-center mb-4 fw-bold"
+                style={{ color: "#212529" }}
+              >
                 Get in Touch
               </h2>
               <p className="text-center text-muted mb-4">
-                We'd love to hear from you! Fill out the form below and we'll get back to you soon.
+                We'd love to hear from you! Fill out the form below and we'll
+                get back to you soon.
               </p>
               <form onSubmit={handleSubmit}>
                 <div className="row g-3">
@@ -91,8 +104,25 @@ export const Contact = () => {
                     ></textarea>
                   </div>
                   <div className="col-12">
-                    <button type="submit" className="btn contact-btn w-100 py-3 fw-semibold">
-                      Send Message
+                    <button
+                      type="submit"
+                      className={`btn btn-primary w-100 fw-semibold d-flex justify-content-center align-items-center ${
+                        isLoading ? "opacity-50" : ""
+                      }`}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <>
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          Sending Message...
+                        </>
+                      ) : (
+                        "Send Message"
+                      )}
                     </button>
                   </div>
                 </div>

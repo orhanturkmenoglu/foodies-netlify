@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-
 import "../Login/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../service/authService";
@@ -9,20 +8,23 @@ import { StoreContext } from "../../context/StoreContext";
 export const Login = () => {
   const { setToken, loadCartData } = useContext(StoreContext);
   const navigate = useNavigate();
+
   const [data, setData] = useState({
     email: "",
     password: "",
   });
 
+  const [isSignInLoading, setIsSignInLoading] = useState(false);
+  const [isResetLoading, setIsResetLoading] = useState(false);
+
   const onChangeHandler = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setData((data) => ({ ...data, [name]: value }));
+    const { name, value } = event.target;
+    setData((prev) => ({ ...prev, [name]: value }));
   };
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log("Data ", data);
+    setIsSignInLoading(true);
 
     try {
       const response = await login(data);
@@ -32,12 +34,23 @@ export const Login = () => {
         await loadCartData(response.data.token);
         navigate("/");
       } else {
-        toast.error("Unable to login.Please try again");
+        toast.error("Unable to login. Please try again");
       }
     } catch (error) {
-      console.log("Unable to login : ", error);
-      toast.error("Unable to login.Please try again");
+      console.error("Login error: ", error);
+      toast.error("Unable to login. Please try again");
+    } finally {
+      setIsSignInLoading(false);
     }
+  };
+
+  const onResetHandler = () => {
+    setIsResetLoading(true);
+    setTimeout(() => {
+      setData({ email: "", password: "" });
+      setIsResetLoading(false);
+      toast.info("Form has been reset.");
+    }, 300); // Küçük gecikme, spinner görünmesi için
   };
 
   return (
@@ -57,8 +70,8 @@ export const Login = () => {
                     id="floatingInput"
                     placeholder="name@example.com"
                     name="email"
-                    onChange={onChangeHandler}
                     value={data.email}
+                    onChange={onChangeHandler}
                     required
                   />
                   <label htmlFor="floatingInput">Email address</label>
@@ -70,8 +83,8 @@ export const Login = () => {
                     id="floatingPassword"
                     placeholder="Password"
                     name="password"
-                    onChange={onChangeHandler}
                     value={data.password}
+                    onChange={onChangeHandler}
                     required
                   />
                   <label htmlFor="floatingPassword">Password</label>
@@ -79,22 +92,53 @@ export const Login = () => {
 
                 <div className="d-grid">
                   <button
-                    className="btn btn-outline-primary btn-login text-uppercase fw-bold"
                     type="submit"
+                    className={`btn btn-outline-primary btn-login text-uppercase fw-bold d-flex justify-content-center align-items-center ${
+                      isSignInLoading ? "opacity-50" : ""
+                    }`}
+                    disabled={isSignInLoading}
                   >
-                    Sign in
+                    {isSignInLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Signing In...
+                      </>
+                    ) : (
+                      "Sign In"
+                    )}
                   </button>
                 </div>
-                <div className="d-grid">
+
+                <div className="d-grid mt-2">
                   <button
-                    className="btn btn-outline-danger btn-login mt-2 text-uppercase fw-bold"
-                    type="submit"
+                    type="button"
+                    className={`btn btn-outline-danger btn-login text-uppercase fw-bold d-flex justify-content-center align-items-center ${
+                      isResetLoading ? "opacity-50" : ""
+                    }`}
+                    onClick={onResetHandler}
+                    disabled={isResetLoading}
                   >
-                    Reset
+                    {isResetLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Resetting...
+                      </>
+                    ) : (
+                      "Reset"
+                    )}
                   </button>
                 </div>
-                <div className="mt-4">
-                  Don't have an account ? <Link to={"/register"}>Sign up</Link>
+
+                <div className="mt-4 text-center">
+                  Don't have an account? <Link to={"/register"}>Sign Up</Link>
                 </div>
               </form>
             </div>

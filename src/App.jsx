@@ -26,7 +26,6 @@ const App = () => {
     <div>
       <Menubar darkMode={darkMode} setDarkMode={setDarkMode} />
       <ToastContainer />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />

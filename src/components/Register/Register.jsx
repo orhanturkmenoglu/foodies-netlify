@@ -1,43 +1,56 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import "../Register/Register.css"
+import "../Register/Register.css";
 import { toast } from "react-toastify";
 import { registerUser } from "../../service/authService";
 export const Register = () => {
-
   const navigate = useNavigate();
 
-  const [data,setData] = useState({
-     name:"",
-     email:"",
-     password:""
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: "",
   });
 
-  const onChangeHandler = (event) =>{
-    const name = event.target.name;
-    console.log("Name",name);
-    const value = event.target.value;
-    console.log("Value",value);
-    setData(data =>({...data,[name]:value}));
-  }
+  const [isSignUpLoading, setIsSignUpLoading] = useState(false);
+  const [isResetLoading, setIsResetLoading] = useState(false);
 
-  const onSubmitHandler =async (event)=> {
+  const onChangeHandler = (event) => {
+    const name = event.target.name;
+    console.log("Name", name);
+    const value = event.target.value;
+    console.log("Value", value);
+    setData((data) => ({ ...data, [name]: value }));
+  };
+
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
+    setIsSignUpLoading(true);
     console.log(data);
 
     try {
-        const response = await registerUser(data);
-        if(response.status === 201) {
-          toast.success("Registration completed.Please login.");
-          navigate("/login")
-        }
-    }catch (error){
-        toast.error("Unable to register.Please try again")
-        console.log("Unable to register.Please try again : "+error);
+      const response = await registerUser(data);
+      if (response.status === 201) {
+        toast.success("Registration completed.Please login.");
+        navigate("/login");
+      }
+    } catch (error) {
+      toast.error("Unable to register.Please try again");
+      console.log("Unable to register.Please try again : " + error);
+    } finally {
+      setIsSignUpLoading(false);
     }
-  }
+  };
 
+const handleReset = () => {
+  setIsResetLoading(true);
+  setTimeout(() => {
+    setData({ name: "", email: "", password: "" });
+    setIsResetLoading(false);
+    toast.info("Form has been reset.");
+  }, 300);
+};
 
   return (
     <div className="register-container">
@@ -91,23 +104,51 @@ export const Register = () => {
 
                 <div className="d-grid">
                   <button
-                    className="btn btn-outline-primary btn-login text-uppercase fw-bold"
                     type="submit"
+                    className={`btn btn-outline-primary btn-login text-uppercase fw-bold d-flex justify-content-center align-items-center ${
+                      isSignUpLoading ? "opacity-50" : ""
+                    }`}
+                    disabled={isSignUpLoading}
                   >
-                     Sign Up
+                    {isSignUpLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Signing Up...
+                      </>
+                    ) : (
+                      "Sign Up"
+                    )}
                   </button>
                 </div>
-                <div className="d-grid">
+                <div className="d-grid mt-2">
                   <button
-                    className="btn btn-outline-danger btn-login mt-2 text-uppercase fw-bold"
-                    type="submit"
+                    type="button"
+                    className={`btn btn-outline-danger btn-login text-uppercase fw-bold d-flex justify-content-center align-items-center ${
+                      isResetLoading ? "opacity-50" : ""
+                    }`}
+                    onClick={handleReset}
+                    disabled={isResetLoading}
                   >
-                    Reset
+                    {isResetLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Resetting...
+                      </>
+                    ) : (
+                      "Reset"
+                    )}
                   </button>
                 </div>
                 <div className="mt-4">
-                  Already have an account ?{" "}
-                  <Link to={"/login"}>Sign In</Link>
+                  Already have an account ? <Link to={"/login"}>Sign In</Link>
                 </div>
               </form>
             </div>
