@@ -8,7 +8,7 @@ export const FoodDisplay = ({ category, searchText }) => {
   const [foods, setFoods] = useState([]);
 
   useEffect(() => {
-    if (foodList && foodList.length > 0) {
+    if (foodList) {
       setFoods(foodList);
       localStorage.setItem("foodList", JSON.stringify(foodList));
     } else {
