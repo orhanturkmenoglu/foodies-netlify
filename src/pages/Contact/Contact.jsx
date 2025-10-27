@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./Contact.css";
-
+import { API_URL } from "../../service/authService";
 
 export const Contact = () => {
   const [data, setData] = useState({
@@ -23,10 +23,7 @@ export const Contact = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        "https://soothing-recreation-production.up.railway.app/api/contact",
-        data
-      );
+      const response = await axios.post(API_URL + "/contact", data);
       if (response.status === 201) {
         toast.success("Message sent successfully!");
         setData({ firstName: "", lastName: "", email: "", message: "" });

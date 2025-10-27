@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://soothing-recreation-production.up.railway.app/api";
+export const API_URL = "https://soothing-recreation-production.up.railway.app/api";
 
 export const registerUser = async (data) => {
    // eslint-disable-next-line no-useless-catch
