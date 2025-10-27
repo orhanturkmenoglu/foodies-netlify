@@ -7,17 +7,14 @@ export const FoodDisplay = ({ category, searchText }) => {
 
   const [foods, setFoods] = useState([]);
 
- useEffect(() => {
-  if (foodList && foodList.length > 0) {
-    setFoods([...foodList]);
-    localStorage.setItem("foodList", JSON.stringify(foodList));
-  } else {
-    const localData = localStorage.getItem("foodList");
-    if (localData) setFoods(JSON.parse(localData));
-    else setFoods([]);
-  }
-}, [foodList]);
-
+  useEffect(() => {
+    if (foodList && foodList.length > 0) {
+      setFoods([...foodList]);
+    } else {
+      setFoods([]);
+    }
+  }, [foodList]);
+  
   const filteredFoods = foods.filter((food) => {
     const matchesCategory = category === "All" || food.category === category;
     const matchesSearch = food.name
