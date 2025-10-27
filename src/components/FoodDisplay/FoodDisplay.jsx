@@ -9,12 +9,14 @@ export const FoodDisplay = ({ category, searchText }) => {
 
   useEffect(() => {
     if (foodList && foodList.length > 0) {
-      setFoods([...foodList]);
+      setFoods(foodList);
+      localStorage.setItem("foodList", JSON.stringify(foodList));
     } else {
-      setFoods([]);
+      const localData = localStorage.getItem("foodList");
+      if (localData) setFoods(JSON.parse(localData));
     }
   }, [foodList]);
-  
+
   const filteredFoods = foods.filter((food) => {
     const matchesCategory = category === "All" || food.category === category;
     const matchesSearch = food.name
